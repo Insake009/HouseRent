@@ -14,13 +14,3 @@ class HouseSerializer(serializers.ModelSerializer):
         model = House
         fields = ['id', 'image', 'city', 'price', 'area', 'quantity_of_rooms',
                   'phone', 'user_id', 'comments', 'likes']
-
-# class CommentsCreateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Comment
-#         fields = ['id', 'text', 'house_id']
-#
-# class LikeCreateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Like
-#         fields = ['id', 'like', 'house_id']
