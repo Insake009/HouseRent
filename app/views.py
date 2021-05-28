@@ -1,24 +1,62 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
 from .models import House
-from .serializers import HouseSerializer, HouseCreateSerializer
+from .serializers import *
+
 
 class HouseListAPIView(generics.ListAPIView):
     queryset = House.objects.all()
     serializer_class = HouseSerializer
     permission_classes = (permissions.AllowAny, )
 
-class HouseRetrieveAPIView(generics.RetrieveAPIView):
+
+class HouseRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = House.objects.all()
     serializer_class = HouseSerializer
+
+
+class LikeAPIView(generics.GenericAPIView):
+    queryset = House.objects.all()
+    serializer_class = HouseSerializer
+
+    def post(self, request, *args, **kwargs):
+        print(request.user)
+        house_id = request.data.get('house')
+        house = House.objects.filter(id=house_id).first()
+        house.likes += 1
+        print(house.likes)
+        house.save()
+        return Response('House liked', status=status.HTTP_202_ACCEPTED)
 
 class HouseCreateAPIView(generics.CreateAPIView):
     queryset = House.objects.all()
-    serializer_class = HouseCreateSerializer
-
-class HouseUpdateAPIView(generics.UpdateAPIView):
-    queryset = House.objects.all()
     serializer_class = HouseSerializer
 
-class HouseDeleteAPIView(generics.DestroyAPIView):
-    queryset = House.objects.all()
-    serializer_class = HouseSerializer
+    def create(self, request, *args, **kwargs):
+        serializer_data = request.data
+        data = {**serializer_data, "user_id": request.user}
+
+        d = House.objects.create(
+            image=data['image'][0],
+            city=data['city'][0],
+            price=data['price'][0],
+            area=data['area'][0],
+            quantity_of_rooms=data['quantity_of_rooms'][0],
+            phone=data['phone'][0],
+            user_id=request.user
+        )
+        print(d)
+        return Response('created', status=status.HTTP_201_CREATED)
+
+# class CommentCreateAPIView(generics.CreateAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentsCreateSerializer
+#
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         self.perform_create(serializer)
+#         headers = self.get_success_headers(serializer.data)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+#
+

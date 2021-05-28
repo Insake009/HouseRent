@@ -8,7 +8,6 @@ urlpatterns = [
     path('api/v1/',include([
         path('users/', include('users.urls')),
         path('app/', include('app.urls')),
-
     ])),
 
 ]

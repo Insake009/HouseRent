@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import House
+from .models import House, Comment
 
 @admin.register(House)
 class HouseAdmin(admin.ModelAdmin):
     list_display = ['id', 'price', 'quantity_of_rooms']
+
+admin.site.register(Comment)

@@ -1,12 +1,26 @@
 from rest_framework import serializers
-from .models import House
+from .models import House, Comment
+
+class CommentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'text', 'house_id']
+
 
 class HouseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = House
-        fields = ['id', 'image', 'city', 'price', 'area', 'quantity_of_rooms', 'phone', 'users_id']
+    comments = CommentsSerializer(many=True, read_only=True, source='hous_id')
 
-class HouseCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = House
-        fields = ['id', 'city', 'price', 'area', 'quantity_of_rooms', 'phone', 'users_id']
+        fields = ['id', 'image', 'city', 'price', 'area', 'quantity_of_rooms',
+                  'phone', 'user_id', 'comments', 'likes']
+
+# class CommentsCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Comment
+#         fields = ['id', 'text', 'house_id']
+#
+# class LikeCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Like
+#         fields = ['id', 'like', 'house_id']
