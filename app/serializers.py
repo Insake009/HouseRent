@@ -13,4 +13,4 @@ class HouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = House
         fields = ['id', 'image', 'city', 'price', 'area', 'quantity_of_rooms',
-                  'phone', 'user_id', 'comments', 'likes']
+                  'phone', 'user_id', 'comments']

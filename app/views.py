@@ -1,6 +1,5 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .models import House
 from .serializers import *
 
 
@@ -9,8 +8,12 @@ class HouseListAPIView(generics.ListAPIView):
     serializer_class = HouseSerializer
     permission_classes = (permissions.AllowAny, )
 
+class HouseRetriveAPIView(generics.RetrieveAPIView):
+    queryset = House.objects.all()
+    serializer_class = HouseSerializer
+    permission_classes = (permissions.AllowAny, )
 
-class HouseRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
+class HouseRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = House.objects.all()
     serializer_class = HouseSerializer
 
